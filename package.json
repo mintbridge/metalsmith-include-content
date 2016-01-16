@@ -1,0 +1,34 @@
+{
+  "name": "metalsmith-include-content",
+  "version": "1.0.0",
+  "description": "A Metalsmith plugin that allows content to be included (nested) within other content by including the file path in the document.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./spec/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mintbridge/metalsmith-include-content.git"
+  },
+  "keywords": [
+    "metalsmith",
+    "include",
+    "content",
+    "plugin"
+  ],
+  "author": "Paul Dixon <paul.dixon@mintbridge.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mintbridge/metalsmith-include-content/issues"
+  },
+  "homepage": "https://github.com/mintbridge/metalsmith-include-content#readme",
+  "dependencies": {
+    "lodash": "^3.0.0|^4.0.0"
+  },
+  "devDependencies": {
+    "assert-dir-equal": "^1.0.1",
+    "chai": "^3.4.1",
+    "metalsmith": "^2.1.0",
+    "mocha": "^2.3.4"
+  }
+}
