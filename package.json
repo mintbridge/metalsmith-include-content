@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/mintbridge/metalsmith-include-content#readme",
   "dependencies": {
-    "lodash": "^3.0.0|^4.0.0"
+    "lodash": "^3.0.0||^4.0.0"
   },
   "devDependencies": {
     "assert-dir-equal": "^1.0.1",

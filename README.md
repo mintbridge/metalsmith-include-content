@@ -1,6 +1,6 @@
-# Metalsmith Include Content
+# Metalsmith Include Content [![NPM version](https://img.shields.io/npm/v/metalsmith-include-content.svg)](https://www.npmjs.org/package/metalsmith-include-content)
 
-A [Metalsmith][http://metalsmith.io] plugin that allows content to be included (nested) within other content by including the file path in the document.
+A [Metalsmith](http://metalsmith.io) plugin that allows content to be included (nested) within other content by including the file path in the document.
 
 Continuous testing courtesy of travis-ci:
 
