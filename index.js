@@ -1,44 +1,61 @@
 'use strict';
 
 var _ = require('lodash');
+var nodePath = require('path');
+var os = require('os');
 
 /**
- * A Metalsmith plugin that allows content to be included (nested)
- * within other content by including the file path in the document
- *
- * @return {Function}
- */
+* A Metalsmith plugin that allows content to be included (nested)
+* within other content by including the file path in the document
+*
+* @return {Function}
+*/
 function include(config) {
-  config = _.assign({
-    pattern: '^include (.*)',
-    ignoreMissing: false,
-  }, config || {});
+ config = _.assign({
+   pattern: '^include (.*)',
+   ignoreMissing: false,
+ }, config || {});
 
-  var exp = new RegExp(config.pattern, 'gmi');
+ var formatPath = function(inputPath) {
+   return inputPath.split(nodePath.sep);
+ };
 
-  var replace = function(files, file, content, exp) {
-    return content.replace(exp, function(match, path) {
-      if (files[path]) {
-        file.includes.push(file);
-        return replace(files, file, files[path].contents.toString(), exp);
-      }
+ var isWindows = function() {
+  return os.platform() === 'win32';
+ };
 
-      return (config.ignoreMissing) ? '' : '"' + path + '" file not found.';
-    });
-  };
+ var exp = new RegExp(config.pattern, 'gmi');
+ var replace = function(files, file, content, exp) {
+   return content.replace(exp, function(match, path) {
+     // here we make path use whatever slash it needs
+     var newPath = path.split(/\/|\\/);
+     newPath = (isWindows() ? newPath.join('\\') : newPath.join('/'));
 
-  return function(files, metalsmith, done) {
-    _.forEach(files, function(file, path) {
-      file.includes = [];
-      files[path].contents = replace(files, file, file.contents.toString(), exp);
-    });
+     if (files[newPath]) {
+       file.includes.push(file);
+       return replace(files, file, files[newPath].contents.toString(), exp);
+     }
 
-    done();
-  };
+     return (config.ignoreMissing) ? '' : '"' + newPath + '" file not found.';
+   });
+ };
+
+ return function(files, metalsmith, done) {
+   _.forEach(files, function(file, path) {
+     var newPath = path.split(/\/|\\/);
+     newPath = (isWindows() ? newPath.join('\\') : newPath.join('/'));
+     file.includes = [];
+     if (newPath) {
+       newPath.contents = replace(files, file, file.contents.toString(), exp);
+     }
+   });
+
+   done();
+ };
 }
 
 /**
- * Expose `include`.
- */
+* Expose `include`.
+*/
 
 module.exports = include;
