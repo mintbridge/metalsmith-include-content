@@ -29,6 +29,12 @@ Metalsmith()
   });
 ```
 
+Then in your markdown files (using the default pattern it needs to be at the start of the line):
+
+```md
+include path/to/file
+```
+
 ### CLI
 If you are using the command-line version of Metalsmith, you can install via npm, and then add the `metalsmith-include-content` key to your `metalsmith.json` file:
 
