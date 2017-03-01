@@ -42,4 +42,16 @@ describe('metalsmith-include-content', function() {
         done();
       });
   });
+
+  it('should only include contents in files that match the specified file pattern', function(done) {
+    new Metalsmith('spec/fixture/filePattern')
+      .use(includeContent({
+        filePattern: '**/*.txt'
+      }))
+      .build(function(err) {
+        if (err) return done(err);
+        equal('spec/fixture/filePattern/expected', 'spec/fixture/filePattern/build');
+        done();
+      });
+  });
 });
