@@ -34,8 +34,10 @@ function include(config) {
 
   return function(files, metalsmith, done) {
     _.forEach(files, function(file, path) {
-      file.includes = [];
-      files[path].contents = replace(files, file, path, file.contents.toString(), exp);
+      if (multimatch(path, config.filePattern || '**/*').length) {
+        file.includes = [];
+        files[path].contents = replace(files, file, path, file.contents.toString(), exp);
+      }
     });
 
     done();
