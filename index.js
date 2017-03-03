@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var multimatch = require('multimatch');
 
 /**
  * A Metalsmith plugin that allows content to be included (nested)
@@ -16,11 +17,15 @@ function include(config) {
 
   var exp = new RegExp(config.pattern, 'gmi');
 
-  var replace = function(files, file, content, exp) {
+  var replace = function(files, file, path, content, exp) {
+    if (multimatch(path, config.filePattern || '**/*').length == 0) {
+      return content;
+    }
+
     return content.replace(exp, function(match, path) {
       if (files[path]) {
         file.includes.push(file);
-        return replace(files, file, files[path].contents.toString(), exp);
+        return replace(files, file, path, files[path].contents.toString(), exp);
       }
 
       return (config.ignoreMissing) ? '' : '"' + path + '" file not found.';
@@ -29,8 +34,10 @@ function include(config) {
 
   return function(files, metalsmith, done) {
     _.forEach(files, function(file, path) {
-      file.includes = [];
-      files[path].contents = replace(files, file, file.contents.toString(), exp);
+      if (multimatch(path, config.filePattern || '**/*').length) {
+        file.includes = [];
+        files[path].contents = replace(files, file, path, file.contents.toString(), exp);
+      }
     });
 
     done();
